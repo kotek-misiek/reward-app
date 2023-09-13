@@ -222,7 +222,6 @@ class TransactionServiceTest extends Specification {
         transactionRepository.findLastId(2L) >> Optional.of(7L)
         transactionRepository.findById(7L) >> Optional.of(TRANSACTION7)
 
-
         def transactionService = new TransactionServiceImpl(userRepository, accountRepository, transactionRepository, PROPERTIES)
 
         when:
