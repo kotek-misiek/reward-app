@@ -19,3 +19,12 @@ spring:
   sql:
     init:
       mode: always
+reward:
+  period-months: 3
+  thresholds:
+    -
+      level: 50.00
+      points: 1
+    -
+      level: 100.00
+      points: 2
