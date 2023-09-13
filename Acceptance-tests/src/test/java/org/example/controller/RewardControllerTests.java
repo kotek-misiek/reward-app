@@ -1,6 +1,7 @@
 package org.example.controller;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import static org.example.constants.Constants.CLIENT;
 import static org.example.constants.Constants.NO_CLARK;
@@ -10,6 +11,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class RewardControllerTests {
     @Test
     public void testGetReward() {
