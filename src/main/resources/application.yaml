@@ -1,0 +1,21 @@
+server:
+  port: 8100
+  error:
+    include-message: always
+spring:
+  application:
+    name: reward
+  h2:
+    console:
+      enabled: true
+  datasource:
+    url: jdbc:h2:mem:reward
+    driverClassName: org.h2.Driver
+    username: sa
+    password: sa
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
