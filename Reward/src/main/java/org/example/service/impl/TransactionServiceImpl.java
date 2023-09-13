@@ -86,6 +86,9 @@ public class TransactionServiceImpl implements TransactionService {
     @Transactional(isolation = SERIALIZABLE)
     public Transaction updateLastTransaction(Long userId, Double amount) {
         LOG.info("START updateLastTransaction({}, {})", userId, amount);
+        if (amount <= 0) {
+            throw new UnacceptableAmountException(amount);
+        }
         final var account = findAccount(userId);
         final var bdAmount = BigDecimal.valueOf(amount);
         final var id = transactionRepository.findLastId(account.getId())
