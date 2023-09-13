@@ -11,8 +11,12 @@
     <groupId>com.example</groupId>
     <artifactId>Reward-App</artifactId>
     <version>1.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
     <name>Reward app</name>
     <description>Demo project for Spring Boot</description>
+    <modules>
+        <module>Reward</module>
+    </modules>
     <properties>
         <java.version>17</java.version>
     </properties>

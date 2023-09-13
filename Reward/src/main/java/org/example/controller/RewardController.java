@@ -17,7 +17,7 @@ public class RewardController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<Double> getTransactions(@PathVariable Long userId) {
+    public ResponseEntity<Double> getReward(@PathVariable Long userId) {
         return ResponseEntity.ok(rewardService.countReward(userId));
     }
 }

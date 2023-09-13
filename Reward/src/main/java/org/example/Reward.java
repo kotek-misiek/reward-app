@@ -4,8 +4,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class RewardApp {
+public class Reward {
     public static void main(String[] args) {
-        SpringApplication.run(RewardApp.class, args);
+        SpringApplication.run(Reward.class, args);
     }
 }
