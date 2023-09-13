@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -20,10 +21,17 @@ import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 public class RewardExceptionHandler {
     private final static Logger LOG = LoggerFactory.getLogger(RewardExceptionHandler.class);
 
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    @ResponseBody
+    ResponseEntity<ErrorResponse> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException ex,
+                                                                               HttpServletRequest req) {
+        return createResponse(req, ex, BAD_REQUEST);
+    }
+
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     @ResponseBody
-    ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchExceptionn(MethodArgumentTypeMismatchException ex,
-                                                                             HttpServletRequest req) {
+    ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex,
+                                                                            HttpServletRequest req) {
         return createResponse(req, ex, BAD_REQUEST);
     }
 

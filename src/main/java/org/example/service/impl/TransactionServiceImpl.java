@@ -28,7 +28,7 @@ import static org.springframework.transaction.annotation.Isolation.SERIALIZABLE;
 public class TransactionServiceImpl implements TransactionService {
     private static final String NO_USER = "User with ID = %s not found";
     private static final String NO_ACCOUNT = "Account belonging to user %s %s not found";
-    private final RewardAppProperties properties;
+    private final Integer periodMonths;
     private final UserRepository userRepository;
     private final AccountRepository accountRepository;
     private final TransactionRepository transactionRepository;
@@ -38,7 +38,7 @@ public class TransactionServiceImpl implements TransactionService {
         this.userRepository = userRepository;
         this.accountRepository = accountRepository;
         this.transactionRepository = transactionRepository;
-        this.properties = properties;
+        this.periodMonths = properties.getPeriodMonths();
     }
 
     @Override
@@ -55,7 +55,7 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public List<Transaction> getLastTransactions(Long userId) {
         final var account = findAccount(userId);
-        final var updatedTimeEnd = Timestamp.valueOf(LocalDateTime.now().minus(properties.getPeriodMonths(), MONTHS));
+        final var updatedTimeEnd = Timestamp.valueOf(LocalDateTime.now().minus(periodMonths, MONTHS));
         return transactionRepository.findByAccountIdAndUpdateTimeGreaterThan(account.getId(), updatedTimeEnd);
     }
 
