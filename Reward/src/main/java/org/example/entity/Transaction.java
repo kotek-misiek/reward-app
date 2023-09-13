@@ -41,9 +41,6 @@ public class Transaction {
     @Enumerated(EnumType.STRING)
     private TransactionTypeEnum transactionType;
 
-    @Column(name = "DELETED")
-    private boolean deleted;
-
     @Column(name = "UPDATE_TIME", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp updateTime;
 }
