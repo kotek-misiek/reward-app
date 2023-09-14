@@ -23,7 +23,7 @@ public class TransactionController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Transaction>> getTransactions() {
+    public ResponseEntity<List<Transaction>> getAllTransactions() {
         return ResponseEntity.ok(transactionService.getAllTransactions());
     }
 
@@ -33,7 +33,7 @@ public class TransactionController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<List<Transaction>> getTransactions(@PathVariable Long userId) {
+    public ResponseEntity<List<Transaction>> getLastTransactions(@PathVariable Long userId) {
         return ResponseEntity.ok(transactionService.getLastTransactions(userId));
     }
 
@@ -43,12 +43,12 @@ public class TransactionController {
     }
 
     @PutMapping("/{userId}/{amount}")
-    public ResponseEntity<Transaction> updateTransaction(@PathVariable Long userId, @PathVariable Double amount) {
+    public ResponseEntity<Transaction> updateLastTransaction(@PathVariable Long userId, @PathVariable Double amount) {
         return ResponseEntity.ok(transactionService.updateLastTransaction(userId, amount));
     }
 
     @DeleteMapping("/{userId}")
-    public ResponseEntity<List<Transaction>> deleteTransaction(@PathVariable Long userId) {
+    public ResponseEntity<List<Transaction>> deleteLastTransaction(@PathVariable Long userId) {
         transactionService.deleteLastTransaction(userId);
         return ResponseEntity.ok(transactionService.getLastTransactions(userId));
     }
