@@ -1,10 +1,10 @@
 package org.example.entity;
 
-import org.example.enums.TransactionTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.example.enums.TransactionTypeEnum;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

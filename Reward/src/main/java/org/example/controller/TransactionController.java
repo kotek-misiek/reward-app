@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -38,12 +39,12 @@ public class TransactionController {
     }
 
     @PostMapping("{userId}/{amount}")
-    public ResponseEntity<Transaction> addTransaction(@PathVariable Long userId, @PathVariable Double amount) {
+    public ResponseEntity<Transaction> addTransaction(@PathVariable Long userId, @PathVariable BigDecimal amount) {
         return ResponseEntity.ok(transactionService.addTransaction(userId, amount));
     }
 
     @PutMapping("/{userId}/{amount}")
-    public ResponseEntity<Transaction> updateLastTransaction(@PathVariable Long userId, @PathVariable Double amount) {
+    public ResponseEntity<Transaction> updateLastTransaction(@PathVariable Long userId, @PathVariable BigDecimal amount) {
         return ResponseEntity.ok(transactionService.updateLastTransaction(userId, amount));
     }
 
