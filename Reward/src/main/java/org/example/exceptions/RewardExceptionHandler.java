@@ -19,6 +19,7 @@ import java.util.NoSuchElementException;
 import static java.time.Instant.now;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @ControllerAdvice
 public class RewardExceptionHandler {
@@ -49,7 +50,7 @@ public class RewardExceptionHandler {
     @ResponseBody
     ResponseEntity<ErrorResponse> handleTransactionNotFoundException(TransactionNotFoundException ex,
                                                                      HttpServletRequest req) {
-        return createResponse(req, ex, INTERNAL_SERVER_ERROR);
+        return createResponse(req, ex, NOT_FOUND);
     }
 
     @ExceptionHandler(NoSuchElementException.class)

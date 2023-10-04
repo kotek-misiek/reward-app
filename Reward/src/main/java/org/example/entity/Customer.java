@@ -1,5 +1,6 @@
 package org.example.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,7 +15,8 @@ import javax.persistence.Table;
 @Table(name = "USERS")
 @Data
 @NoArgsConstructor
-public class User {
+@AllArgsConstructor
+public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

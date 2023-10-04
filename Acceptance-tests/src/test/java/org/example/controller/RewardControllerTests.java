@@ -46,4 +46,28 @@ public class RewardControllerTests {
                         "to required type 'java.lang.Long'; nested exception is java.lang.NumberFormatException: " +
                         "For input string: \"null\""));
     }
+
+    @Test
+    public void testGetTable() {
+        CLIENT.sendTableRequest(2L)
+                .then()
+                .statusCode(OK.value())
+                .body("name", equalTo("Howard Stark"))
+                .body("monthRate.size()", equalTo(4))
+                .body("monthRate[3].month", equalTo("TOTAL"))
+                .body("monthRate[3].points", equalTo(270.0F));
+        CLIENT.sendTableRequest(-100L)
+                .then()
+                .statusCode(OK.value())
+                .body("size()", equalTo(2))
+                .body("[0].name", equalTo("John Wick"))
+                .body("[0].monthRate.size()", equalTo(2))
+                .body("[0].monthRate[0].points", equalTo(0))
+                .body("[0].monthRate[1].month", equalTo("TOTAL"))
+                .body("[0].monthRate[1].points", equalTo(0))
+                .body("[1].name", equalTo("Howard Stark"))
+                .body("[1].monthRate.size()", equalTo(4))
+                .body("[1].monthRate[3].month", equalTo("TOTAL"))
+                .body("[1].monthRate[3].points", equalTo(270.0F));
+    }
 }
