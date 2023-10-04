@@ -20,5 +20,4 @@ public class RewardController {
     public ResponseEntity<Double> getReward(@PathVariable Long userId) {
         return ResponseEntity.ok(rewardService.countReward(userId));
     }
-
 }
