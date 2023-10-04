@@ -1,5 +1,14 @@
 package org.example.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum TransactionTypeEnum {
-    A, U
+    A("Added"), U("Updated");
+
+    private final String value;
+
+    TransactionTypeEnum(String value) {
+        this.value = value;
+    }
 }

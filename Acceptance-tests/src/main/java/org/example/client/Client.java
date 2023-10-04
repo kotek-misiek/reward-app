@@ -22,6 +22,13 @@ public class Client {
                 : request.get(REWARD + "/" + userId);
     }
 
+    public Response sendTableRequest(Long userId) {
+        final var request = createRequest();
+        return Long.valueOf(-100L).equals(userId)
+                ? request.get(REWARD + "/table")
+                : request.get(REWARD + "/table/" + userId);
+    }
+
     public Response sendAllTransactionsRequest(Long userId) {
         final var request = createRequest();
         return Long.valueOf(-100L).equals(userId)

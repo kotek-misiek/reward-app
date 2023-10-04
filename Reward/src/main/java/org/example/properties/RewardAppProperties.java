@@ -1,21 +1,18 @@
 package org.example.properties;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
+import org.springframework.boot.context.properties.ConstructorBinding;
 
 import java.util.List;
+import java.util.Optional;
 
-@Component
+import static java.util.Optional.ofNullable;
+
 @ConfigurationProperties(prefix = "reward")
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-public class RewardAppProperties {
-    private Integer periodMonths;
-    private List<Threshold> thresholds;
+public record RewardAppProperties(Optional<Integer> periodMonths, Optional<List<Threshold>> thresholds) {
+    @ConstructorBinding
+    public RewardAppProperties(Integer periodMonths, List<Threshold> thresholds) {
+        this(ofNullable(periodMonths), ofNullable(thresholds));
+    }
+
 }

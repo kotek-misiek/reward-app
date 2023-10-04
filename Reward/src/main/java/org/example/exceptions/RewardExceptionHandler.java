@@ -12,10 +12,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.NoSuchElementException;
 
+import static java.time.Instant.now;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @ControllerAdvice
 public class RewardExceptionHandler {
@@ -46,7 +50,7 @@ public class RewardExceptionHandler {
     @ResponseBody
     ResponseEntity<ErrorResponse> handleTransactionNotFoundException(TransactionNotFoundException ex,
                                                                      HttpServletRequest req) {
-        return createResponse(req, ex, INTERNAL_SERVER_ERROR);
+        return createResponse(req, ex, NOT_FOUND);
     }
 
     @ExceptionHandler(NoSuchElementException.class)
@@ -67,6 +71,7 @@ public class RewardExceptionHandler {
         var path = req.getServletPath();
         LOG.error(message);
         return new ResponseEntity<>(
-                new ErrorResponse(httpStatus.value(), httpStatus.getReasonPhrase(), message, path), httpStatus);
+                new ErrorResponse(LocalDateTime.ofInstant(now(), ZoneId.systemDefault()),
+                        httpStatus.value(), httpStatus.getReasonPhrase(), message, path), httpStatus);
     }
 }

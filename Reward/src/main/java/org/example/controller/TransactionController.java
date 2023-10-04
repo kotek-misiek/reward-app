@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -27,29 +28,29 @@ public class TransactionController {
         return ResponseEntity.ok(transactionService.getAllTransactions());
     }
 
-    @GetMapping("/all/{userId}")
-    public ResponseEntity<List<Transaction>> getAllTransactions(@PathVariable Long userId) {
-        return ResponseEntity.ok(transactionService.getAllTransactions(userId));
+    @GetMapping("/all/{customerId}")
+    public ResponseEntity<List<Transaction>> getAllTransactions(@PathVariable Long customerId) {
+        return ResponseEntity.ok(transactionService.getAllTransactions(customerId));
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<List<Transaction>> getLastTransactions(@PathVariable Long userId) {
-        return ResponseEntity.ok(transactionService.getLastTransactions(userId));
+    @GetMapping("/{customerId}")
+    public ResponseEntity<List<Transaction>> getLastTransactions(@PathVariable Long customerId) {
+        return ResponseEntity.ok(transactionService.getLastTransactions(customerId));
     }
 
-    @PostMapping("{userId}/{amount}")
-    public ResponseEntity<Transaction> addTransaction(@PathVariable Long userId, @PathVariable Double amount) {
-        return ResponseEntity.ok(transactionService.addTransaction(userId, amount));
+    @PostMapping("{customerId}/{amount}")
+    public ResponseEntity<Transaction> addTransaction(@PathVariable Long customerId, @PathVariable BigDecimal amount) {
+        return ResponseEntity.ok(transactionService.addTransaction(customerId, amount));
     }
 
-    @PutMapping("/{userId}/{amount}")
-    public ResponseEntity<Transaction> updateLastTransaction(@PathVariable Long userId, @PathVariable Double amount) {
-        return ResponseEntity.ok(transactionService.updateLastTransaction(userId, amount));
+    @PutMapping("/{customerId}/{amount}")
+    public ResponseEntity<Transaction> updateLastTransaction(@PathVariable Long customerId, @PathVariable BigDecimal amount) {
+        return ResponseEntity.ok(transactionService.updateLastTransaction(customerId, amount));
     }
 
-    @DeleteMapping("/{userId}")
-    public ResponseEntity<List<Transaction>> deleteLastTransaction(@PathVariable Long userId) {
-        transactionService.deleteLastTransaction(userId);
-        return ResponseEntity.ok(transactionService.getLastTransactions(userId));
+    @DeleteMapping("/{customerId}")
+    public ResponseEntity<List<Transaction>> deleteLastTransaction(@PathVariable Long customerId) {
+        transactionService.deleteLastTransaction(customerId);
+        return ResponseEntity.ok(transactionService.getLastTransactions(customerId));
     }
 }

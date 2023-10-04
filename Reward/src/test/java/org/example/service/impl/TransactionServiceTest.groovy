@@ -2,7 +2,7 @@ package org.example.service.impl
 
 import org.example.entity.Account
 import org.example.entity.Transaction
-import org.example.entity.User
+import org.example.entity.Customer
 import org.example.enums.TransactionTypeEnum
 import org.example.exceptions.TransactionNotFoundException
 import org.example.exceptions.UnacceptableAmountException
@@ -10,7 +10,7 @@ import org.example.properties.RewardAppProperties
 import org.example.properties.Threshold
 import org.example.repository.AccountRepository
 import org.example.repository.TransactionRepository
-import org.example.repository.UserRepository
+import org.example.repository.CustomerRepository
 import spock.lang.Specification
 
 import java.sql.Timestamp
@@ -28,9 +28,9 @@ class TransactionServiceTest extends Specification {
             List.of(new Threshold(BigDecimal.valueOf(50), 1),
                     new Threshold(BigDecimal.valueOf(100), 2)))
 
-    def static USER1 = new User(1L, "John", "Wick")
-    def static USER2 = new User(2L, "Howard", "Stark")
-    def static USER3 = new User(3L, "Clark", "Kent")
+    def static USER1 = new Customer(1L, "John", "Wick")
+    def static USER2 = new Customer(2L, "Howard", "Stark")
+    def static USER3 = new Customer(3L, "Clark", "Kent")
 
     def static ACCOUNT0 = new Account(0, USER1, 20.0, Timestamp.valueOf(LocalDateTime.now()))
     def static ACCOUNT1 = new Account(1, USER1, 20.0, Timestamp.valueOf(LocalDateTime.now()))
@@ -51,7 +51,7 @@ class TransactionServiceTest extends Specification {
     def static TRANSACTION7 = new Transaction(7, ACCOUNT2, 130.00,
             TransactionTypeEnum.A, Timestamp.valueOf(LocalDateTime.now()))
 
-    def userRepository = Mock(UserRepository)
+    def userRepository = Mock(CustomerRepository)
     def accountRepository = Mock(AccountRepository)
     def transactionRepository = Mock(TransactionRepository)
 
@@ -71,8 +71,8 @@ class TransactionServiceTest extends Specification {
         given:
         userRepository.findById(1L) >> Optional.of(USER1)
         userRepository.findById(2L) >> Optional.of(USER2)
-        accountRepository.findByUserId(1L) >> Optional.of(ACCOUNT1)
-        accountRepository.findByUserId(2L) >> Optional.of(ACCOUNT2)
+        accountRepository.findByCustomerId(1L) >> Optional.of(ACCOUNT1)
+        accountRepository.findByCustomerId(2L) >> Optional.of(ACCOUNT2)
         transactionRepository.findByAccountId(1L) >> List.of(TRANSACTION1)
         transactionRepository.findByAccountId(2L) >> List.of(TRANSACTION2, TRANSACTION3, TRANSACTION4)
 
@@ -93,8 +93,8 @@ class TransactionServiceTest extends Specification {
     def "getLastTransactions OK"() {
         given:
         userRepository.findById(2L) >> Optional.of(USER2)
-        accountRepository.findByUserId(2L) >> Optional.of(ACCOUNT2)
-        transactionRepository.findByAccountIdAndUpdateTimeGreaterThan(2L, _) >> List.of(TRANSACTION3, TRANSACTION4)
+        accountRepository.findByCustomerId(2L) >> Optional.of(ACCOUNT2)
+        transactionRepository.findByAccountIdAndUpdateTimeGreaterThan(2L, (Timestamp) _) >> List.of(TRANSACTION3, TRANSACTION4)
 
         def transactionService = new TransactionServiceImpl(userRepository, accountRepository, transactionRepository, PROPERTIES)
 
@@ -109,7 +109,7 @@ class TransactionServiceTest extends Specification {
         given:
         userRepository.findById(3L) >> Optional.of(USER3)
         userRepository.findById(4L) >> { throw new NoSuchElementException(NO_USER) }
-        accountRepository.findByUserId(3L) >> { throw new NoSuchElementException(NO_CLARK) }
+        accountRepository.findByCustomerId(3L) >> { throw new NoSuchElementException(NO_CLARK) }
 
         def transactionService = new TransactionServiceImpl(userRepository, accountRepository, transactionRepository, PROPERTIES)
 
@@ -131,7 +131,7 @@ class TransactionServiceTest extends Specification {
         def transactionService = new TransactionServiceImpl(userRepository, accountRepository, transactionRepository, PROPERTIES)
 
         when:
-        transactionService.addTransaction(1L, 0)
+        transactionService.addTransaction(1L, 0.0)
 
         then:
         def e = thrown(UnacceptableAmountException)
@@ -141,8 +141,8 @@ class TransactionServiceTest extends Specification {
     def "addTransaction OK"() {
         given:
         userRepository.findById(2L) >> Optional.of(USER2)
-        accountRepository.findByUserId(2L) >> Optional.of(ACCOUNT2)
-        transactionRepository.save(_) >> TRANSACTION7
+        accountRepository.findByCustomerId(2L) >> Optional.of(ACCOUNT2)
+        transactionRepository.save((Transaction) _) >> TRANSACTION7
 
         def transactionService = new TransactionServiceImpl(userRepository, accountRepository, transactionRepository, PROPERTIES)
 
@@ -157,7 +157,7 @@ class TransactionServiceTest extends Specification {
         given:
         userRepository.findById(1L) >> Optional.of(USER1)
         userRepository.findById(2L) >> Optional.of(USER2)
-        accountRepository.findByUserId(userId) >> Optional.of(account)
+        accountRepository.findByCustomerId(userId) >> Optional.of(account)
         transactionRepository.findLastId(0L) >> Optional.empty()
         transactionRepository.findLastId(2L) >> Optional.of(2L)
         transactionRepository.findById(2L) >> { throw new TransactionNotFoundException(2L) }
@@ -180,10 +180,10 @@ class TransactionServiceTest extends Specification {
     def "updateLastTransaction OK"() {
         given:
         userRepository.findById(2L) >> Optional.of(USER2)
-        accountRepository.findByUserId(2L) >> Optional.of(ACCOUNT2)
+        accountRepository.findByCustomerId(2L) >> Optional.of(ACCOUNT2)
         transactionRepository.findLastId(2L) >> Optional.of(7L)
         transactionRepository.findById(7L) >> Optional.of(TRANSACTION7)
-        transactionRepository.save(_) >> TRANSACTION7
+        transactionRepository.save((Transaction) _) >> TRANSACTION7
 
         def transactionService = new TransactionServiceImpl(userRepository, accountRepository, transactionRepository, PROPERTIES)
 
@@ -197,7 +197,7 @@ class TransactionServiceTest extends Specification {
     def "deleteLastTransaction Exception"() {
         given:
         userRepository.findById(1L) >> Optional.of(USER1)
-        accountRepository.findByUserId(1L) >> Optional.of(ACCOUNT1)
+        accountRepository.findByCustomerId(1L) >> Optional.of(ACCOUNT1)
         transactionRepository.findLastId(1L) >> optLastId
         transactionRepository.findById(2L) >> Optional.empty()
         def transactionService = new TransactionServiceImpl(userRepository, accountRepository, transactionRepository, PROPERTIES)
@@ -218,7 +218,7 @@ class TransactionServiceTest extends Specification {
     def "deleteLastTransaction OK"() {
         given:
         userRepository.findById(2L) >> Optional.of(USER2)
-        accountRepository.findByUserId(2L) >> Optional.of(ACCOUNT2)
+        accountRepository.findByCustomerId(2L) >> Optional.of(ACCOUNT2)
         transactionRepository.findLastId(2L) >> Optional.of(7L)
         transactionRepository.findById(7L) >> Optional.of(TRANSACTION7)
 
